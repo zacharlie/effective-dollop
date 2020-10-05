@@ -48,10 +48,6 @@ Example:
 "#85929E","#2E4053","white","fa fa-ban","#","Lorem Ipsum","Lorem ipsum dolor sit amet."
 ```
 
-## Icon Availablity
-
-This app uses a local copy of the Font Awesome library (not a CDN). Included is a Font Awesome Free Web package, which does not support all available font awesome icons (e.g. brands). Swap out the fa folder with your Font Awesome distribution to get access to your additional icons. Info on the current version is available in */fa/version.txt*
-
 ## Data Integrity
 
 Enscapulating the item values in quotes **(")** within the csv source is a strict requirement.
