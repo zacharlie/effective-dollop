@@ -1,0 +1,37 @@
+/*IE*/
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+.card-scrollbar {
+    /* ie scrollbar color properties */
+    scrollbar-base-color: #efefef;
+    scrollbar-face-color: #666666;
+    scrollbar-3dlight-color: #666666;
+    scrollbar-highlight-color: #666666;
+    scrollbar-track-color: #efefef;
+    scrollbar-arrow-color: #666666;
+    scrollbar-shadow-color: #666666;
+    scrollbar-dark-shadow-color: #666666;
+  }
+}
+
+/*Firefox*/
+/*From version 64 - https://drafts.csswg.org/css-scrollbars-1/*/
+.card-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #666666 #efefef;
+}
+
+/*Chrome*/
+.card-scrollbar::-webkit-scrollbar-track {
+  background-color: #efefef;
+  width: 4px;
+}
+
+.card-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #666666;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+
+.card-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
