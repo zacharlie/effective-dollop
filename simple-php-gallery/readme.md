@@ -137,3 +137,5 @@ This site does not make use of polyfills or any fancy backend functions to suppo
 This product comes without warranty and will eat your homework.
 
 ## Unlicensed
+
+By the Unlicense License
