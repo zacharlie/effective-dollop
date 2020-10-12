@@ -1,0 +1,10 @@
+/* SQL Snippets */
+
+/* -------------------------------------------------- */
+
+/* Add custom projection into postgis db */
+
+INSERT INTO spatial_ref_sys (srid,proj4text) VALUES (40030,
+													 '+proj=aea +lat_0=0 +lon_0=25 +lat_1=-24 +lat_2=-33 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs +type=crs');  -- example using custom albers conic (za/sanbi)
+
+ 
