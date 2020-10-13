@@ -2,7 +2,7 @@
 
 This script details the SQL and steps taken to ingest the [Global Biodiversity Information Facility](https://en.wikipedia.org/wiki/Global_Biodiversity_Information_Facility) occurance data from a csv into a database and convert the occurances into point features within a postgis db.
 
-Data used from `https://www.gbif.org/`. It's main value is basically th field map for the columns which is design for the simple csv format (no media and not the raw darwin core data).
+Data used from `https://www.gbif.org/`. It's main value is basically the field map for the columns which is design for the *simple* csv format (i.e. no media, and not the raw darwin core data).
 
 Modelled on occurence data from *10/2020* for South African region: `https://www.gbif.org/occurrence/search?country=ZA&occurrence_status=present`
 
@@ -66,11 +66,64 @@ DELIMITER E'\t' CSV;
 
 for the remaining elements. The psql COPY command used is transactional, so when an error is encountered, the inclusion of a file will fail. This is usually due to data in the wrong format or column on a specific line, so by splitting the input into a manageable size we can isolate and remove particular issues in the source data and simply reprocess them.
 
+## Citation DOIURL
+
+Before modifying or distributing the data I include a citation reference column
+
+```
+ALTER TABLE bi_za_dlzyvv6f_species_occurences ADD COLUMN DOIURL VARCHAR(50) DEFAULT 'https://doi.org/10.15468/dl.xyz123';
+UPDATE gbif_za_dlzyvv6f_species_occurences SET DOIURL = "https://doi.org/10.15468/dl.xyz123";
+```
+
+## Species listings
+
+Species information is captured differently depending on the observation source, so first we create a distinct table to isolate important elements which can be refined later.
+
+```
+CREATE TABLE species_list AS SELECT DISTINCT 
+
+gbif_kingdom,
+gbif_phylum,
+gbif_class,
+gbif_order,
+gbif_family,
+gbif_genus,
+gbif_species,
+gbif_infraspecificEpithet,
+gbif_taxonRank,
+gbif_scientificName,
+gbif_verbatimScientificName,
+gbif_verbatimScientificNameAuthorship
+
+FROM gbif_za_dlzyvv6f_species_occurences;
+```
+
+We then get a prioritised name value, as the actual name information may be in one of a number of fields.
+
+```
+ALTER TABLE species_list ADD COLUMN PrioritisedSpeciesID VARCHAR;
+UPDATE species_list SET PrioritisedSpeciesID = COALESCE(gbif_genus, gbif_scientificName, gbif_species, gbif_verbatimScientificName, NULL);  -- get prioritised species value
+```
+
+Then a distinct/ unique values list is generated as a new table.
+
+```
+CREATE TABLE distinct_species AS SELECT DISTINCT PrioritisedSpeciesID FROM species_list;
+```
+
+This list can be exported to CSV, with the resulting output filtered with the spreadsheet formulae to identify erroneous features.
+
+The following spreadsheet formulae are useful in assessing data integrity.
+
+- Check for special characters: `=SUMPRODUCT(--ISNUMBER(SEARCH({"(";")";".";","},A2)))>0`
+- Check for duplicated cell value in range: `=COUNTIF($A$2:$A$999999,A2) > 1`
+- Check if any checks fail: `=IF(COUNTIF(B2:C2,"TRUE"),"TRUE","FALSE")`
+
 ## Notes
 
-VARCHAR field lengths in the SQL should be reasonable for general data, but when processing a large bunch of records (> 20 million), there seems to be errata in the ingestion data (e.g. locale description in province field etc), so lengths were dropped in practice for the sake of expediency.
+VARCHAR field lengths listed in the SQL should be reasonable for general data, but when processing a large bunch of records (> 20 million), there seems to be errata in the ingestion data (e.g. locale description in province field etc), so field lengths were dropped in practice for the sake of expediency.
 
-0 Valued dates are included as `0000-12-30T00:00:00` for some records, which will cause an invlaid date error. I recommend doing a find and replace for these values with the epoch datetime `1970-01-01T00:00:00`.
+0 Valued dates are included as `0000-12-30T00:00:00` for some records, which will cause an invalid date error. I recommend doing a find and replace for these values in the source data with the epoch datetime `1970-01-01T00:00:00`.
 
 CSV Columns:
 ```
