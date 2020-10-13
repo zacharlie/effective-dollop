@@ -70,6 +70,8 @@ for the remaining elements. The psql COPY command used is transactional, so when
 
 VARCHAR field lengths in the SQL should be reasonable for general data, but when processing a large bunch of records (> 20 million), there seems to be errata in the ingestion data (e.g. locale description in province field etc), so lengths were dropped in practice for the sake of expediency.
 
+0 Valued dates are included as `0000-12-30T00:00:00` for some records, which will cause an invlaid date error. I recommend doing a find and replace for these values with the epoch datetime `1970-01-01T00:00:00`.
+
 CSV Columns:
 ```
 (gbif_gbifID,
