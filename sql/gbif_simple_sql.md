@@ -1,6 +1,6 @@
 # GBIF Simple
 
-This script details the SQL and steps taken to ingest the [Global Biodiversity Information Facility](https://en.wikipedia.org/wiki/Global_Biodiversity_Information_Facility) occurance data from a csv into a database and convert the occurances into point features within a postgis db.
+This script details the SQL and steps taken to ingest the [Global Biodiversity Information Facility](https://en.wikipedia.org/wiki/Global_Biodiversity_Information_Facility) occurence data from a csv into a database and convert the occurences into point features within a postgis db.
 
 Data used from `https://www.gbif.org/`. It's main value is basically the field map for the columns which is design for the *simple* csv format (i.e. no media, and not the raw darwin core data).
 
