@@ -26,7 +26,9 @@ This project is primarily *distributed* on GitHub, and therefore, utilises git, 
 
 Git uses delta versioning, so it's not ideal for binary files (like gpkg), compressed files (like qgz) and large xml structures which automatically update timestamps, change odd lines and may result in numerous overlapping conflicts (like qgs).
 
-In addition, this is not expected to be a very active project, so it's been included with the effective-dollop repo. This might be a bit of a challenge for unskilled users as they will have to either download the entire repository, use a third party tool like curl/ wget or use the GitHub "RAW" data and save-as to get the specific file they want to use. If this becomes a major issue for people, make a comment on [Issue 7](https://github.com/zacharlie/effective-dollop/issues/7) and if there's enoguh interest I can make a new repository, however at this time i don't feel it's necessary.
+In addition, this is not expected to be a very active project, so it's been included with the effective-dollop repo. This might be a bit of a challenge for unskilled users as they will have to either download the entire repository, use a third party tool like curl/ wget or use the GitHub "RAW" data and save-as to get the specific file they want to use.
+
+If this becomes a major issue for people, make a comment on [Issue 7](https://github.com/zacharlie/effective-dollop/issues/7) and if there's enough interest I can make a new repository, however at this time I don't feel it's necessary.
 
 The project primarily uses data from Natural Earth, stored in a local geopackage, but note that the *.gitignore* file excludes `*.gpkg`. This is because git is ill-suited for this type of data management and GitHub is used primarily for publication purposes. Updates to the underlying geodata
 
