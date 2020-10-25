@@ -2,3 +2,7 @@
 php/
 *.cmd
 *.sh
+*.qgs~
+*.gpkg
+*.gpkg-shm
+*.gpkg-wal
