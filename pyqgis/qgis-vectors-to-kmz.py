@@ -15,7 +15,7 @@ from zipfile import ZipFile
 
 layers = [layer for layer in QgsProject.instance().mapLayers().values()]
 
-out_dir = 'P:/data/kml_output'  # tempdir
+out_dir = 'P:/data/kml_output'
 
 # create blank template kml to store data
 blankkml = ET.fromstring('<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"></kml>')
