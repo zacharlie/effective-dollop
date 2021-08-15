@@ -81,7 +81,7 @@ for layer in layers:
 
 # write the combined output kml
 output_kml = os.path.join(out_dir, 'MergedOutput.kml')
-writetree = ET.ElementTree(outroot)
+writetree = ET.ElementTree(blankkml)
 writetree.write(output_kml, xml_declaration=True, encoding="utf-8")
 print(output_kml + ' written to disk')
 
