@@ -7,7 +7,7 @@ set PATH=%PATH%%~dp0bin;
 call C:\OSGeo4W\bin\o4w_env.bat;
 
 set INDIR=%~dp0input_data
-rem set OUTFILE=%~dp0output.gpkg
+set OUTFILE=%~dp0output.gpkg
 REM Specify the file extension for input files
 set EXT=tif
 
