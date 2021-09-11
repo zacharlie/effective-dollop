@@ -23,7 +23,7 @@ if exist "%OUTFILE%" (
 cd "%INDIR%"
 
 for %%f in (*.%EXT%) do (
-    gdal_translate -of gpkg "%%f" "%OUTFILE%" -co TILE_FORMAT=AUTO -co APPEND_SUBDATASET=YES  -co RASTER_TABLE=%%~nf
+    gdal_translate -of gpkg "%%f" "%OUTFILE%" -co TILE_FORMAT=AUTO -co APPEND_SUBDATASET=YES  -co "RASTER_TABLE=%%~nf"
     echo "Processed %%~nf..."
 )
 
