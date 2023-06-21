@@ -1,0 +1,70 @@
+import json
+import requests
+
+# set the output path for your geojson file
+output_filepath = 'D:/dev/output.geojson'
+
+# fetch the response as an http request
+response = requests.get('https://service.free-key-de.eu/map/api/hotspots.php')
+# cast the response to the text content as a string and replace the invalid json starting data
+response = response.text.replace('.hotspots(', '')
+# remove any possible trailing whitespace
+response = response.strip()
+# remove the unbalanced closing parenthesis bracket from .hotspots() - i.e. the last character in the text
+response = response[:-1]
+# parse the json object to an array of objects
+json_data = json.loads(response)
+
+# You can review the first object and schema with print(json_data[0])
+"""
+{
+    "hotspot_id": 1839,
+    "latitude": "50.73972000",
+    "longitude": "8.28597000",
+    "street": "Hauptstraße",
+    "streetnumber": "55-59",
+    "status": "in Bau",
+    "bezeichnung": "Stadt Dillenburg",
+    "city": "Dillenburg",
+    "zip": "35683",
+    "type": "c",
+    "eigentuemer": "IT-Innerebner Gmbh",
+    "ansprechpartner": "Walter Innerebner",
+    "telefon": "+43 512 390605",
+    "lat": "50.73972000",
+    "lng": "8.28597000"
+}
+"""
+
+# We can easily convert this to GeoJSON explicitly, if we review the structure of a basic GeoJSON:
+
+"""
+{
+"type": "FeatureCollection",
+"name": "MyGeoJSON",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "FieldName": "FieldValue" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 1.234, 4.321 ] ] } },
+{ "type": "Feature", "properties": { "FieldName": "FieldValue" }, "geometry": { "type": "MultiPoint", "coordinates": [ [ 4.321, 1.234 ] ] } }
+]
+}
+"""
+
+with open(output_filepath, 'w') as output_file:
+    # Let's write out the leading lines
+    file_header = """{
+    "type": "FeatureCollection",
+    "name": "MyGeoJSON",
+    "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+    "features":
+    """
+    output_file.write(file_header)
+    # Let's write out our array of data objects accordingly - and replace escape characters (json also expects double quotes)
+    features_objects = [ '{ "type": "Feature", "properties": ' + str(json.dumps(feature)).replace("\\'",'"').replace('\\"','"') + ', "geometry": { "type": "MultiPoint", "coordinates": [ [ ' + str(feature["longitude"]) + ', ' + str(feature["latitude"]) + '] ] } }' for feature in json_data]
+    # we will need to escape the dumped escape characters again
+    output_file.write(str(features_objects).replace("'{","{").replace("}'","}"))
+    # Close off the file
+    output_file.write('}')
+
+# assuming you're running this from the pyqgis console
+iface.addVectorLayer(output_filepath, "my_layer", "ogr")
