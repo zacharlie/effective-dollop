@@ -1,0 +1,13 @@
+ocrimg/*
+srcimg/*
+
+*.txt
+*.jpg
+*.jpeg
+*.webp
+*.png
+*.gif
+
+!ocrimg/.gitkeep
+!srcimg/example.gif
+!gif2frames.cmd
